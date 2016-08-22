@@ -6,12 +6,12 @@ namespace Paradigma {
     export class SharepointList {
         private url: string = "/_api/web/Lists";
 
-        public getListById(name: string): SharepontListQuery {
-            return new SharepontListQuery(this.url + "(guid'@')".replace('@', name));
+        public getListById(id: string): SharepontListQuery {
+            return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
         }
 
-        public getListByName(id: string): SharepontListQuery {
-            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', id));
+        public getListByName(name: string): SharepontListQuery {
+            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', name));
         }
     }
 

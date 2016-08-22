@@ -6,11 +6,11 @@ var Paradigma;
         function SharepointList() {
             this.url = "/_api/web/Lists";
         }
-        SharepointList.prototype.getListById = function (name) {
-            return new SharepontListQuery(this.url + "(guid'@')".replace('@', name));
+        SharepointList.prototype.getListById = function (id) {
+            return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
         };
-        SharepointList.prototype.getListByName = function (id) {
-            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', id));
+        SharepointList.prototype.getListByName = function (name) {
+            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', name));
         };
         return SharepointList;
     }());
