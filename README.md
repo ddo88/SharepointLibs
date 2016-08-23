@@ -12,6 +12,8 @@ Js lib SharepointLib is designed to ease query sharepoint rest api on sharepoint
 - getItems - find items in Sharepointlist
 - getFields - find fields in Sharepointlist
 - getContentTypes - find ContenTypes on Sharepointlist
+- getListType - return ListType e.g: "SP.Data.CustomListListItem"
+- insertListItem - insert ListItem in list
 
 ### SharepointListFields
 - FilterBy - method to add odata filter to query
@@ -41,3 +43,11 @@ new SharepointList()
 .done(function (d) { console.log(d); });
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/ContentTypes"*
+
+insert example:
+```
+new Paradigma.SharepointList()
+.getListByName("CustomList")
+.insertListItem({Title:"TestInset",Url:"http://google.com"})
+.done(function(d){console.log(d);})
+```
