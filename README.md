@@ -23,7 +23,7 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 - Expand   - method to add odata Expand lookup properties to query
 
 ### Example of use:
-```
+```js
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getItems()
@@ -35,7 +35,7 @@ new Paradigma.SharepointList()
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items?$top=2&$select=Id"* and return jquery.ajax promise
 
 another example:
-```
+```js
 new SharepointList()
 .getListByName("CustomList")
 .getContentTypes()
@@ -44,8 +44,8 @@ new SharepointList()
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/ContentTypes"*
 
-insert example:
-```
+insert list item example:
+```js
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .insertListItem({Title:"TestInsert",Url:"http://google.com"})
