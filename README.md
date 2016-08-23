@@ -1,6 +1,6 @@
 # Paradigma.SharepointList
 
-Js lib SharepointLib is designed to ease query sharepoint rest api on sharepoint list
+SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 
 ## Methods
 
