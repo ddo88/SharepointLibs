@@ -1,6 +1,6 @@
 # Paradigma.SharepointList
 
-Js lib SharepointLib is designed to ease query sharepoint rest api on sharepoint list
+SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 
 ## Methods
 
@@ -12,6 +12,8 @@ Js lib SharepointLib is designed to ease query sharepoint rest api on sharepoint
 - getItems - find items in Sharepointlist
 - getFields - find fields in Sharepointlist
 - getContentTypes - find ContenTypes on Sharepointlist
+- getListItemEntityType - return ListItemEntityType e.g: "SP.Data.CustomListListItem"
+- insertListItem - insert ListItem in list
 
 ### SharepointListFields
 - FilterBy - method to add odata filter to query
@@ -21,7 +23,7 @@ Js lib SharepointLib is designed to ease query sharepoint rest api on sharepoint
 - Expand   - method to add odata Expand lookup properties to query
 
 ### Example of use:
-```
+```js
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getItems()
@@ -33,7 +35,7 @@ new Paradigma.SharepointList()
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items?$top=2&$select=Id"* and return jquery.ajax promise
 
 another example:
-```
+```js
 new SharepointList()
 .getListByName("CustomList")
 .getContentTypes()
@@ -41,3 +43,11 @@ new SharepointList()
 .done(function (d) { console.log(d); });
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/ContentTypes"*
+
+insert list item example:
+```js
+new Paradigma.SharepointList()
+.getListByName("CustomList")
+.insertListItem({Title:"TestInsert",Url:"http://google.com"})
+.done(function(d){console.log(d);})
+```
