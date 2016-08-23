@@ -29,7 +29,7 @@ var Paradigma;
         SharepontListQuery.prototype.getContentTypes = function () {
             return new SharepointListFields(this.url + "/ContentTypes");
         };
-        SharepontListQuery.prototype.getListType = function () {
+        SharepontListQuery.prototype.getListItemEntityType = function () {
             return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         };
         SharepontListQuery.prototype.insertListItem = function (item) {
@@ -39,7 +39,7 @@ var Paradigma;
             //  UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval)
             //}
             item["__metadata"] = {
-                "type": this.getListType()
+                "type": this.getListItemEntityType()
             };
             return new Paradigma.Utils().postRequest(this.url + "/Items", item);
         };

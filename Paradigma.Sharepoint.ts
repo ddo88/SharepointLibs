@@ -30,7 +30,7 @@ namespace Paradigma {
         public getContentTypes(): SharepointListFields {
             return new SharepointListFields(this.url + "/ContentTypes");
         }
-        public getListType():string
+        public getListItemEntityType():string
         {
             return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         }
@@ -43,7 +43,7 @@ namespace Paradigma {
               //  UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval)
             //}
             item["__metadata"] = {
-                "type": this.getListType()
+                "type": this.getListItemEntityType()
             };
             return new Paradigma.Utils().postRequest(this.url+ "/Items",item);
         }
