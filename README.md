@@ -48,6 +48,6 @@ insert example:
 ```
 new Paradigma.SharepointList()
 .getListByName("CustomList")
-.insertListItem({Title:"TestInset",Url:"http://google.com"})
+.insertListItem({Title:"TestInsert",Url:"http://google.com"})
 .done(function(d){console.log(d);})
 ```
