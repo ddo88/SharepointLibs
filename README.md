@@ -12,7 +12,7 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 - getItems - find items in Sharepointlist
 - getFields - find fields in Sharepointlist
 - getContentTypes - find ContenTypes on Sharepointlist
-- getListType - return ListType e.g: "SP.Data.CustomListListItem"
+- getListItemEntityType - return ListItemEntityType e.g: "SP.Data.CustomListListItem"
 - insertListItem - insert ListItem in list
 
 ### SharepointListFields
