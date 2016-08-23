@@ -1,4 +1,6 @@
 /// <reference path="definitions/jquery.d.ts" />
+/// <reference path="definitions/SharePoint.d.ts" />
+/// <reference path="Helpers.js" />
 /// <reference path="Paradigma.Sharepoint.Utils.ts" />
 
 namespace Paradigma {
@@ -35,13 +37,13 @@ namespace Paradigma {
             return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         }
 
-        public insertListItem(item:any)
+        public insertListItem(item:any):any
         {
             debugger;
             //is IE
-            //if (detectBrowser().isIE) {
-              //  UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval)
-            //}
+            if (detectBrowser().isIE) {
+              UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            }
             item["__metadata"] = {
                 "type": this.getListItemEntityType()
             };

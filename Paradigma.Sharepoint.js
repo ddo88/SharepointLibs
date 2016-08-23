@@ -1,4 +1,6 @@
 /// <reference path="definitions/jquery.d.ts" />
+/// <reference path="definitions/SharePoint.d.ts" />
+/// <reference path="Helpers.js" />
 /// <reference path="Paradigma.Sharepoint.Utils.ts" />
 var Paradigma;
 (function (Paradigma) {
@@ -35,9 +37,9 @@ var Paradigma;
         SharepontListQuery.prototype.insertListItem = function (item) {
             debugger;
             //is IE
-            //if (detectBrowser().isIE) {
-            //  UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval)
-            //}
+            if (detectBrowser().isIE) {
+                UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            }
             item["__metadata"] = {
                 "type": this.getListItemEntityType()
             };
