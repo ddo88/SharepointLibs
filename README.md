@@ -10,6 +10,7 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 
 ### SharepontListQuery
 - getItems - find items in Sharepointlist
+- getItemById - find Item by Id
 - getFields - find fields in Sharepointlist
 - getContentTypes - find ContenTypes on Sharepointlist
 - getListItemEntityType - return ListItemEntityType e.g: "SP.Data.CustomListListItem"
@@ -44,6 +45,14 @@ new SharepointList()
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/ContentTypes"*
 
+```js
+new Paradigma.SharepointList()
+.getListByName("CustomList")
+.getItemById(1)
+.done(function(d){console.log(d);})
+```
+this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items(1)"*
+
 insert list item example:
 ```js
 new Paradigma.SharepointList()
@@ -51,3 +60,4 @@ new Paradigma.SharepointList()
 .insertListItem({Title:"TestInsert",Url:"http://google.com"})
 .done(function(d){console.log(d);})
 ```
+
