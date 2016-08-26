@@ -5,6 +5,13 @@
 
 namespace Paradigma {
 
+    // export class APp{
+
+    //     public EJE(){
+    //         new Paradigma.SharepointList().getListByName("ListaEnviarA").getItemById(1).Exec().done(function(d){console.log(d);})
+    //     }
+    // }
+
     export class SharepointList {
         private url: string = "/_api/web/Lists";
 
@@ -26,6 +33,9 @@ namespace Paradigma {
         public getItems(): SharepointListFields {
             return new SharepointListFields(this.url + "/Items");
         }
+        public getItemById(id:number):SharepointListItemsMethods{
+            return new SharepointListItemsMethods(this.url+"/Items(@)".replace('@',id.toString()));
+        }
         public getFields(): SharepointListFields {
             return new SharepointListFields(this.url + "/Fields");
         }
@@ -36,38 +46,36 @@ namespace Paradigma {
         {
             return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         }
-
+        
         public insertListItem(item:any):any
         {
-            debugger;
-            //is IE
-            if (detectBrowser().isIE) {
+            //if IE
+            if (detectBrowser().isIE){
               UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
             }
-            item["__metadata"] = {
-                "type": this.getListItemEntityType()
-            };
+            item["__metadata"] = { "type": this.getListItemEntityType() };
             return new Paradigma.Utils().postRequest(this.url+ "/Items",item);
         }
     }
-    
+
     export class SharepointListFields {
 
-        private odata: string = "";
+        private odata: string   = "";
         private dictionaryOdata = [];
-        private url: string = "";
-
+        private url: string     = "";
 
         constructor(url: string) {
             this.url = url;
         }
-
+        
+        get Url():string{
+            return this.url;
+        }
         private IsValid(value): boolean {
             return value !== undefined &&
                    value !== null      &&
                     (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         }
-
         public FilterBy(filter: string, connector?:string): SharepointListFields {
             this.addProperty("$filter", filter,connector);
             return this;
@@ -88,7 +96,6 @@ namespace Paradigma {
             this.addProperty("$expand", expand);
             return this;
         }
-
         private addProperty(key: string, value: string, connector?: string) {
             if (this.IsValid(value)){
                 if (this.dictionaryOdata[key] === undefined) {
@@ -129,5 +136,24 @@ namespace Paradigma {
             this.ProcessOdata();
             return new Paradigma.Utils().getRequest(this.url + this.odata);
         }
+        public ExecSync():any{
+            this.ProcessOdata();
+            return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
+        }
     }    
+
+    export class SharepointListItemsMethods extends SharepointListFields{
+
+        constructor(url:string){
+            super(url);
+        }
+        public getFieldValuesAsHtml(){            
+           return new SharepointListFields(this.Url+"/fieldValuesAsHtml");
+        }
+        public getFieldValuesAsText(){
+           return new SharepointListFields(this.Url+"/fieldValuesAsText");
+        }
+    }
+    
+    
 }

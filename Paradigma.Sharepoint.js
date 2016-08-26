@@ -2,8 +2,18 @@
 /// <reference path="definitions/SharePoint.d.ts" />
 /// <reference path="Helpers.js" />
 /// <reference path="Paradigma.Sharepoint.Utils.ts" />
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Paradigma;
 (function (Paradigma) {
+    // export class APp{
+    //     public EJE(){
+    //         new Paradigma.SharepointList().getListByName("ListaEnviarA").getItemById(1).Exec().done(function(d){console.log(d);})
+    //     }
+    // }
     var SharepointList = (function () {
         function SharepointList() {
             this.url = "/_api/web/Lists";
@@ -25,6 +35,9 @@ var Paradigma;
         SharepontListQuery.prototype.getItems = function () {
             return new SharepointListFields(this.url + "/Items");
         };
+        SharepontListQuery.prototype.getItemById = function (id) {
+            return new SharepointListItemsMethods(this.url + "/Items(@)".replace('@', id.toString()));
+        };
         SharepontListQuery.prototype.getFields = function () {
             return new SharepointListFields(this.url + "/Fields");
         };
@@ -35,14 +48,11 @@ var Paradigma;
             return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         };
         SharepontListQuery.prototype.insertListItem = function (item) {
-            debugger;
-            //is IE
+            //if IE
             if (detectBrowser().isIE) {
                 UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
             }
-            item["__metadata"] = {
-                "type": this.getListItemEntityType()
-            };
+            item["__metadata"] = { "type": this.getListItemEntityType() };
             return new Paradigma.Utils().postRequest(this.url + "/Items", item);
         };
         return SharepontListQuery;
@@ -55,6 +65,13 @@ var Paradigma;
             this.url = "";
             this.url = url;
         }
+        Object.defineProperty(SharepointListFields.prototype, "Url", {
+            get: function () {
+                return this.url;
+            },
+            enumerable: true,
+            configurable: true
+        });
         SharepointListFields.prototype.IsValid = function (value) {
             return value !== undefined &&
                 value !== null &&
@@ -119,8 +136,26 @@ var Paradigma;
             this.ProcessOdata();
             return new Paradigma.Utils().getRequest(this.url + this.odata);
         };
+        SharepointListFields.prototype.ExecSync = function () {
+            this.ProcessOdata();
+            return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
+        };
         return SharepointListFields;
     }());
     Paradigma.SharepointListFields = SharepointListFields;
+    var SharepointListItemsMethods = (function (_super) {
+        __extends(SharepointListItemsMethods, _super);
+        function SharepointListItemsMethods(url) {
+            _super.call(this, url);
+        }
+        SharepointListItemsMethods.prototype.getFieldValuesAsHtml = function () {
+            return new SharepointListFields(this.Url + "/fieldValuesAsHtml");
+        };
+        SharepointListItemsMethods.prototype.getFieldValuesAsText = function () {
+            return new SharepointListFields(this.Url + "/fieldValuesAsText");
+        };
+        return SharepointListItemsMethods;
+    }(SharepointListFields));
+    Paradigma.SharepointListItemsMethods = SharepointListItemsMethods;
 })(Paradigma || (Paradigma = {}));
 //# sourceMappingURL=Paradigma.Sharepoint.js.map

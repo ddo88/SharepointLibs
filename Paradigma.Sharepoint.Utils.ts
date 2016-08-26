@@ -2,7 +2,6 @@
 
 namespace Paradigma
 {
-
     export class Utils {
 
         public postRequest(url:string,data:any):any{
