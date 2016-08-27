@@ -1,4 +1,8 @@
-
+/*extrated from 
+http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser?answertab=active#tab-top
+by the user
+http://stackoverflow.com/users/938089/rob-w
+*/
 function detectBrowser() {
     return {
         isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
