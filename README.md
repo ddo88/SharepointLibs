@@ -61,7 +61,7 @@ new Paradigma.SharepointList()
 .Exec()
 .done(function(d){console.log(d);});
 ```
-this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items?$top=2&$select=Id"* and return jquery.ajax promise
+this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items?$top=2&$select=Id,Title,Url"* and return jquery.ajax promise
 
 another example:
 ```js
