@@ -28,23 +28,23 @@ var Paradigma;
                 value !== null &&
                 (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         };
-        OdataRest.prototype.FilterBy = function (filter, connector) {
+        OdataRest.prototype.filterBy = function (filter, connector) {
             this.addProperty("$filter", filter, connector);
             return this;
         };
-        OdataRest.prototype.OrderBy = function (orderBy) {
+        OdataRest.prototype.orderBy = function (orderBy) {
             this.addProperty("$orderBy", orderBy);
             return this;
         };
-        OdataRest.prototype.Select = function (fields) {
+        OdataRest.prototype.select = function (fields) {
             this.addProperty("$select", fields);
             return this;
         };
-        OdataRest.prototype.Top = function (top) {
+        OdataRest.prototype.top = function (top) {
             this.addProperty("$top", top);
             return this;
         };
-        OdataRest.prototype.Expand = function (expand) {
+        OdataRest.prototype.expand = function (expand) {
             this.addProperty("$expand", expand);
             return this;
         };
@@ -83,11 +83,11 @@ var Paradigma;
                 }
             }
         };
-        OdataRest.prototype.Exec = function () {
+        OdataRest.prototype.exec = function () {
             this.ProcessOdata();
             return new Paradigma.Utils().getRequest(this.url + this.odata);
         };
-        OdataRest.prototype.ExecSync = function () {
+        OdataRest.prototype.execSync = function () {
             this.ProcessOdata();
             return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
         };

@@ -25,23 +25,23 @@ namespace Paradigma {
                    value !== null      &&
                     (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         }
-        public FilterBy(filter: string, connector?:string): OdataRest {
+        public filterBy(filter: string, connector?:string): OdataRest {
             this.addProperty("$filter", filter,connector);
             return this;
         }
-        public OrderBy(orderBy: string): OdataRest {
+        public orderBy(orderBy: string): OdataRest {
             this.addProperty("$orderBy", orderBy);
             return this;
         }
-        public Select(fields: string): OdataRest {
+        public select(fields: string): OdataRest {
             this.addProperty("$select", fields);
             return this;
         }
-        public Top(top: string): OdataRest {
+        public top(top: string): OdataRest {
             this.addProperty("$top", top);
             return this;
         }
-        public Expand(expand: string): OdataRest {
+        public expand(expand: string): OdataRest {
             this.addProperty("$expand", expand);
             return this;
         }
@@ -81,11 +81,11 @@ namespace Paradigma {
                 }
             }
         }
-        public Exec(): any {
+        public exec(): any {
             this.ProcessOdata();
             return new Paradigma.Utils().getRequest(this.url + this.odata);
         }
-        public ExecSync():any{
+        public execSync():any{
             this.ProcessOdata();
             return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
         }
@@ -97,7 +97,7 @@ namespace Paradigma {
             return "/_api/web/Lists";
         }
     }
-    
+
     export class SharepointList extends OdataRest {
 
         constructor(site?:string) {

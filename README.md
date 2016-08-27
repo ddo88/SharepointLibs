@@ -22,24 +22,24 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 - getAttachmentFiles - find attachment files in the selected listitem
 
 ### OdataRest
-- FilterBy - method to add odata filter to query
-- OrderBy  - method to add odata orderBY field to query
-- Select   - method to add odata select Fields to query
-- Top      - method to add odata top limit to query
-- Expand   - method to add odata Expand lookup properties to query
+- filterBy - method to add odata filter to query
+- orderBy  - method to add odata orderBy field to query
+- select   - method to add odata select Fields to query
+- top      - method to add odata top limit to query
+- expand   - method to add odata expand lookup properties to query
 
 ### Example of use:
 ```js
     new Paradigma.SharepointList()
-    .Exec()
+    .exec()
     .done(function(d){console.log(d);});
 ```
 this examples generate this request *"/_api/web/Lists"* and return jquery.ajax promise
 
 ```js
     new Paradigma.SharepointList()
-    .FilterBy("Title eq 'CustomList'")
-    .Exec()
+    .filterBy("Title eq 'CustomList'")
+    .exec()
     .done(function(d){console.log(d);});
 ```
 this examples generate this request *"/_api/web/Lists?$filter=Title eq 'CustomList'"* and return jquery.ajax promise
@@ -47,7 +47,7 @@ this examples generate this request *"/_api/web/Lists?$filter=Title eq 'CustomLi
 ```js
     new Paradigma.SharepointList()
     .getListByName("CustomList")
-    .Exec()
+    .exec()
     .done(function(d){console.log(d);});
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')"* and return jquery.ajax promise
@@ -56,9 +56,9 @@ this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')"*
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getItems()
-.Top(2)
-.Select("Id,Title,Url")
-.Exec()
+.top(2)
+.select("Id,Title,Url")
+.exec()
 .done(function(d){console.log(d);});
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items?$top=2&$select=Id,Title,Url"* and return jquery.ajax promise
@@ -68,7 +68,7 @@ another example:
 new SharepointList()
 .getListByName("CustomList")
 .getContentTypes()
-.Exec()
+.exec()
 .done(function (d) { console.log(d); });
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/ContentTypes"*
@@ -77,6 +77,7 @@ this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/C
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getItemById(1)
+.exec()
 .done(function(d){console.log(d);})
 ```
 this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/Items(1)"*
