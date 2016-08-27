@@ -81,11 +81,11 @@ namespace Paradigma {
         }
         public exec(): any {
             this.ProcessOdata();
-            return new Paradigma.Utils().getRequest(this.url + this.odata);
+            return Paradigma.Utils.getRequest(this.url + this.odata);
         }
         public execSync():any{
             this.ProcessOdata();
-            return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
+            return Paradigma.Utils.getSyncRequest(this.url + this.odata);
         }
     }
 
@@ -95,16 +95,55 @@ namespace Paradigma {
             return "/_api/web/Lists";
         }
 
+        public static get folders():string{
+            return "/_api/web/Folders";
+        }
+
         public static get userprofile():string{
             return "/_api/sp.userprofiles.peoplemanager";
+        }
+    }
+
+    export class SharepointFolder extends OdataRest{
+        
+    constructor(url:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.folders));
+        }
+
+        public getByName(name:string){
+            return new SharepointFolder(this.Url+"('@')".replace('@',name)); 
+        }
+
+        public getFiles(){
+            return new SharepointFile(this.Url);
+        }
+    }
+
+    export class SharepointFile extends OdataRest{
+        
+        constructor(url:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(url,'/Files'));
+        }
+
+        public getByName(name:string){
+            return new SharepointFile(this.Url+"('@')".replace('@',name)); 
+        }
+
+        public getListItemAllFields(){
+            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ListItemAllFields")); 
+        }
+
+        public getServerRelativeUrl(){
+            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ServerRelativeUrl"));
+            
         }
     }
 
     export class SharepointUserProfile extends OdataRest
     {
         
-        constructor(url?:string) {
-            super((url!==undefined?url:"")+SharepointEndpoints.userprofile);
+        constructor(url:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.userprofile));
         }
         public getMyProperties():OdataRest{
             return new OdataRest(this.Url + "/getmyproperties");
@@ -114,8 +153,8 @@ namespace Paradigma {
 
     export class SharepointList extends OdataRest {
 
-        constructor(site?:string) {
-            super((site!==undefined?site:"")+SharepointEndpoints.list);
+        constructor(site:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(site,SharepointEndpoints.list));
         }
         public getListById(id: string): SharepontListQuery {
             return new SharepontListQuery(this.Url + "(guid'@')".replace('@', id));

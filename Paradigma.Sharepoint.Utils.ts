@@ -4,7 +4,10 @@ namespace Paradigma
 {
     export class Utils {
 
-        public postRequest(url:string,data:any):any{
+        public static AppendStringOnlyOnce(prefix:string,sufix:string):string{
+            return prefix + ((prefix.indexOf(sufix)<0?sufix:""));
+        }
+        public static postRequest(url:string,data:any):any{
             var settings: JQueryAjaxSettings = {
                 url:  url,
                 type: "POST",
@@ -18,7 +21,7 @@ namespace Paradigma
             return $.ajax(settings);
         }
 
-        public getRequest(url): any {
+        public static getRequest(url): any {
             var settings: JQueryAjaxSettings = {
                 url: url,
                 type: "GET",
@@ -29,7 +32,7 @@ namespace Paradigma
             return jQuery.ajax(settings);
         }
 
-        public getSyncRequest(url:string):any {
+        public static getSyncRequest(url:string):any {
             var result;
             var settings: JQueryAjaxSettings = {
                 url: url,

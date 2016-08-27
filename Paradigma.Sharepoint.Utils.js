@@ -4,7 +4,10 @@ var Paradigma;
     var Utils = (function () {
         function Utils() {
         }
-        Utils.prototype.postRequest = function (url, data) {
+        Utils.AppendStringOnlyOnce = function (prefix, sufix) {
+            return prefix + ((prefix.indexOf(sufix) < 0 ? sufix : ""));
+        };
+        Utils.postRequest = function (url, data) {
             var settings = {
                 url: url,
                 type: "POST",
@@ -17,7 +20,7 @@ var Paradigma;
             };
             return $.ajax(settings);
         };
-        Utils.prototype.getRequest = function (url) {
+        Utils.getRequest = function (url) {
             var settings = {
                 url: url,
                 type: "GET",
@@ -27,7 +30,7 @@ var Paradigma;
             };
             return jQuery.ajax(settings);
         };
-        Utils.prototype.getSyncRequest = function (url) {
+        Utils.getSyncRequest = function (url) {
             var result;
             var settings = {
                 url: url,

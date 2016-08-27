@@ -1,10 +1,11 @@
 # Paradigma.SharepointList
 
-SharepointLib is designed to ease query sharepoint rest api on sharepoint list
+SharepointLib is designed to ease query sharepoint rest api on sharepoint
 
 ## Methods
 
 ### SharepointList
+
 - getListById   - find list by guid
 - getListByName - enable find list by Name
 
@@ -65,7 +66,7 @@ this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')/I
 
 another example:
 ```js
-new SharepointList()
+new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getContentTypes()
 .exec()
@@ -90,3 +91,92 @@ new Paradigma.SharepointList()
 .done(function(d){console.log(d);})
 ```
 
+### Sharepoint Folder
+allow to user sharepoint rest api into folder of sharepoint
+
+- getByName - find folder by name  
+- getFiles - find file in folder
+
+### SharepointFile
+
+- getByName - find file in folder by name property
+- getListItemAllFields - get all list item fields of file
+- getServerRelativeUrl - get relative url from specific file
+
+### Example of use:
+
+get allfolders
+```js
+new Paradigma.SharepointFolder()
+    .exec()
+    .done(function(d){
+        console.log(d);
+        });
+```
+
+*"/_api/web/Folders"*
+
+find folder by Name
+```js
+new Paradigma.SharepointFolder()
+    .getByName('Banner')
+    .exec()
+    .done(function(d){console.log(d);});
+```
+*"/_api/web/Folders('Banner')"*
+
+files in folder
+```js
+new Paradigma.SharepointFolder()
+    .getByName('Banner')
+    .getFiles()
+    .exec()
+    .done(function(d){console.log(d);});
+```
+*"/_api/web/Folders('Banner')/Files"*
+
+filter files in folder
+```js
+new Paradigma.SharepointFolder()
+    .getByName('Banner')
+    .getFiles()
+    .filterBy("Name eq 'banner_03.jpg'")
+    .exec().done(function(d){console.log(d);});
+```
+*"/_api/web/Folders('Banner')/Files?$filter=Name eq 'banner_03.jpg'"*
+
+get List item properties from file
+```js
+new Paradigma.SharepointFolder()
+    .getByName('Banner')
+    .getFiles()
+    .getByName('arbol.png')
+    .getListItemAllFields()
+    .exec()
+    .done(function(d){console.log(d);});
+```
+*"/_api/web/Folders('Banner')/Files('arbol.png')/ListItemAllFields"*
+
+get file relative url from file
+```js 
+    new Paradigma.SharepointFolder()
+    .getByName('Banner')
+    .getFiles()
+    .getByName('arbol.png')
+    .getServerRelativeUrl()
+    .exec()
+    .done(function(d){console.log(d);});
+```
+*"/_api/web/Folders('Banner')/Files('arbol.png')/ServerRelativeUrl"*
+
+### Sharepoint User profile
+
+- getMyProperties - get all userprofile properties from current user;
+
+```js
+new Paradigma.SharepointUserProfile()
+    .getMyProperties()
+    .exec()
+    .done(function(d){ console.log(d);});
+```
+*"/_api/sp.userprofiles.peoplemanager/getmyproperties"*
