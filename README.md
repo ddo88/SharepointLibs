@@ -30,6 +30,29 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 
 ### Example of use:
 ```js
+    new Paradigma.SharepointList()
+    .Exec()
+    .done(function(d){console.log(d);});
+```
+this examples generate this request *"/_api/web/Lists"* and return jquery.ajax promise
+
+```js
+    new Paradigma.SharepointList()
+    .FilterBy("Title eq 'CustomList'")
+    .Exec()
+    .done(function(d){console.log(d);});
+```
+this examples generate this request *"/_api/web/Lists?$filter=Title eq 'CustomList'"* and return jquery.ajax promise
+
+```js
+    new Paradigma.SharepointList()
+    .getListByName("CustomList")
+    .Exec()
+    .done(function(d){console.log(d);});
+```
+this examples generate this request *"/_api/web/Lists/GetByTitle('CustomList')"* and return jquery.ajax promise
+
+```js
 new Paradigma.SharepointList()
 .getListByName("CustomList")
 .getItems()
