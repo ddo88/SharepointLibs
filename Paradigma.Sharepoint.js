@@ -104,9 +104,27 @@ var Paradigma;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(SharepointEndpoints, "userprofile", {
+            get: function () {
+                return "/_api/sp.userprofiles.peoplemanager";
+            },
+            enumerable: true,
+            configurable: true
+        });
         return SharepointEndpoints;
     }());
     Paradigma.SharepointEndpoints = SharepointEndpoints;
+    var SharepointUserProfile = (function (_super) {
+        __extends(SharepointUserProfile, _super);
+        function SharepointUserProfile(url) {
+            _super.call(this, (url !== undefined ? url : "") + SharepointEndpoints.userprofile);
+        }
+        SharepointUserProfile.prototype.getMyProperties = function () {
+            return new OdataRest(this.Url + "/getmyproperties");
+        };
+        return SharepointUserProfile;
+    }(OdataRest));
+    Paradigma.SharepointUserProfile = SharepointUserProfile;
     var SharepointList = (function (_super) {
         __extends(SharepointList, _super);
         function SharepointList(site) {

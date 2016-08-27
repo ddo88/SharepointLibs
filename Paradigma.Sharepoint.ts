@@ -5,8 +5,6 @@
 
 namespace Paradigma {
 
-    
-
     export class OdataRest {
 
         private odata: string   = "";
@@ -96,7 +94,23 @@ namespace Paradigma {
         public static get list() : string {
             return "/_api/web/Lists";
         }
+
+        public static get userprofile():string{
+            return "/_api/sp.userprofiles.peoplemanager";
+        }
     }
+
+    export class SharepointUserProfile extends OdataRest
+    {
+        
+        constructor(url?:string) {
+            super((url!==undefined?url:"")+SharepointEndpoints.userprofile);
+        }
+        public getMyProperties():OdataRest{
+            return new OdataRest(this.Url + "/getmyproperties");
+        }
+    }
+
 
     export class SharepointList extends OdataRest {
 
