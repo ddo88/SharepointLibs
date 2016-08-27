@@ -18,11 +18,7 @@ namespace Paradigma {
         get Url():string{
             return this.url;
         }
-        private IsValid(value): boolean {
-            return value !== undefined &&
-                   value !== null      &&
-                    (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
-        }
+        
         public filterBy(filter: string, connector?:string): OdataRest {
             this.addProperty("$filter", filter,connector);
             return this;
@@ -44,7 +40,7 @@ namespace Paradigma {
             return this;
         }
         private addProperty(key: string, value: string, connector?: string) {
-            if (this.IsValid(value)){
+            if (Paradigma.Utils.IsValid(value)){
                 if (this.dictionaryOdata[key] === undefined) {
                     this.dictionaryOdata[key] = value;
                 }

@@ -4,6 +4,11 @@ namespace Paradigma
 {
     export class Utils {
 
+        public static IsValid(value:any): boolean {
+            return value !== undefined &&
+                   value !== null      &&
+                    (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
+        }
         public static AppendStringOnlyOnce(prefix:string,sufix:string):string{
             return prefix + ((prefix.indexOf(sufix)<0?sufix:""));
         }

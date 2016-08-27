@@ -23,11 +23,6 @@ var Paradigma;
             enumerable: true,
             configurable: true
         });
-        OdataRest.prototype.IsValid = function (value) {
-            return value !== undefined &&
-                value !== null &&
-                (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
-        };
         OdataRest.prototype.filterBy = function (filter, connector) {
             this.addProperty("$filter", filter, connector);
             return this;
@@ -49,7 +44,7 @@ var Paradigma;
             return this;
         };
         OdataRest.prototype.addProperty = function (key, value, connector) {
-            if (this.IsValid(value)) {
+            if (Paradigma.Utils.IsValid(value)) {
                 if (this.dictionaryOdata[key] === undefined) {
                     this.dictionaryOdata[key] = value;
                 }

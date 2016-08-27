@@ -4,6 +4,11 @@ var Paradigma;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.IsValid = function (value) {
+            return value !== undefined &&
+                value !== null &&
+                (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
+        };
         Utils.AppendStringOnlyOnce = function (prefix, sufix) {
             return prefix + ((prefix.indexOf(sufix) < 0 ? sufix : ""));
         };

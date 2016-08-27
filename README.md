@@ -2,6 +2,16 @@
 
 SharepointLib is designed to ease query sharepoint rest api on sharepoint
 
+## OdataRest
+
+this class allow odata methods for query 
+
+- filterBy - method to add odata filter to query
+- orderBy  - method to add odata orderBy field to query
+- select   - method to add odata select Fields to query
+- top      - method to add odata top limit to query
+- expand   - method to add odata expand lookup properties to query
+
 ## Methods
 
 ### SharepointList
@@ -22,12 +32,7 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint
 - getFieldValuesAsText - return fields of seleted listitem on text format
 - getAttachmentFiles - find attachment files in the selected listitem
 
-### OdataRest
-- filterBy - method to add odata filter to query
-- orderBy  - method to add odata orderBy field to query
-- select   - method to add odata select Fields to query
-- top      - method to add odata top limit to query
-- expand   - method to add odata expand lookup properties to query
+
 
 ### Example of use:
 ```js
@@ -180,3 +185,12 @@ new Paradigma.SharepointUserProfile()
     .done(function(d){ console.log(d);});
 ```
 *"/_api/sp.userprofiles.peoplemanager/getmyproperties"*
+
+
+### Paradigma Utils
+
+contains helper methods for diferent uses
+
+- ajax methods
+- append strings
+
