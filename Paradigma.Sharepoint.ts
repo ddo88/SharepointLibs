@@ -5,23 +5,9 @@
 
 namespace Paradigma {
 
-    export class SharepointList {
+    
 
-        private url: string = "/_api/web/Lists";
-        
-        constructor(site?:string) {
-            this.url=(site!==undefined?site+this.url:this.url);
-        }
-        public getListById(id: string): SharepontListQuery {
-            return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
-        }
-
-        public getListByName(name: string): SharepontListQuery {
-            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', name));
-        }
-    }
-
-    export class SharepointListFields {
+    export class OdataRest {
 
         private odata: string   = "";
         private dictionaryOdata = [];
@@ -39,23 +25,23 @@ namespace Paradigma {
                    value !== null      &&
                     (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         }
-        public FilterBy(filter: string, connector?:string): SharepointListFields {
+        public FilterBy(filter: string, connector?:string): OdataRest {
             this.addProperty("$filter", filter,connector);
             return this;
         }
-        public OrderBy(orderBy: string): SharepointListFields {
+        public OrderBy(orderBy: string): OdataRest {
             this.addProperty("$orderBy", orderBy);
             return this;
         }
-        public Select(fields: string): SharepointListFields {
+        public Select(fields: string): OdataRest {
             this.addProperty("$select", fields);
             return this;
         }
-        public Top(top: string): SharepointListFields {
+        public Top(top: string): OdataRest {
             this.addProperty("$top", top);
             return this;
         }
-        public Expand(expand: string): SharepointListFields {
+        public Expand(expand: string): OdataRest {
             this.addProperty("$expand", expand);
             return this;
         }
@@ -105,22 +91,43 @@ namespace Paradigma {
         }
     }
 
-    export class SharepontListQuery extends SharepointListFields {
+    export class SharepointEndpoints
+    {
+        public static get list() : string {
+            return "/_api/web/Lists";
+        }
+    }
+    
+    export class SharepointList extends OdataRest {
+
+        constructor(site?:string) {
+            super((site!==undefined?site:"")+SharepointEndpoints.list);
+        }
+        public getListById(id: string): SharepontListQuery {
+            return new SharepontListQuery(this.Url + "(guid'@')".replace('@', id));
+        }
+
+        public getListByName(name: string): SharepontListQuery {
+            return new SharepontListQuery(this.Url + "/GetByTitle('@')".replace('@', name));
+        }
+    }
+
+    export class SharepontListQuery extends OdataRest {
 
         constructor(url: string) {
             super(url);
         }
-        public getItems(): SharepointListFields {
-            return new SharepointListFields(this.Url + "/Items");
+        public getItems(): OdataRest {
+            return new OdataRest(this.Url + "/Items");
         }
         public getItemById(id:number):SharepointListItemsMethods{
             return new SharepointListItemsMethods(this.Url+"/Items(@)".replace('@',id.toString()));
         }
-        public getFields(): SharepointListFields {
-            return new SharepointListFields(this.Url + "/Fields");
+        public getFields(): OdataRest {
+            return new OdataRest(this.Url + "/Fields");
         }
-        public getContentTypes(): SharepointListFields {
-            return new SharepointListFields(this.Url + "/ContentTypes");
+        public getContentTypes(): OdataRest {
+            return new OdataRest(this.Url + "/ContentTypes");
         }
         public getListItemEntityType():string
         {
@@ -138,19 +145,19 @@ namespace Paradigma {
         }
     }    
 
-    export class SharepointListItemsMethods extends SharepointListFields{
+    export class SharepointListItemsMethods extends OdataRest{
 
         constructor(url:string){
             super(url);
         }
         public getFieldValuesAsHtml(){            
-           return new SharepointListFields(this.Url+"/fieldValuesAsHtml");
+           return new OdataRest(this.Url+"/fieldValuesAsHtml");
         }
         public getFieldValuesAsText(){
-           return new SharepointListFields(this.Url+"/fieldValuesAsText");
+           return new OdataRest(this.Url+"/fieldValuesAsText");
         }
         public getAttachmentFiles(){
-            return new SharepointListFields(this.Url+"/AttachmentFiles")
+            return new OdataRest(this.Url+"/AttachmentFiles")
         }
     }
     

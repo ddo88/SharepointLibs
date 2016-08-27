@@ -21,7 +21,7 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 - getFieldValuesAsText - return fields of seleted listitem on text format
 - getAttachmentFiles - find attachment files in the selected listitem
 
-### SharepointListFields
+### OdataRest
 - FilterBy - method to add odata filter to query
 - OrderBy  - method to add odata orderBY field to query
 - Select   - method to add odata select Fields to query

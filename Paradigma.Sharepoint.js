@@ -9,60 +9,46 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Paradigma;
 (function (Paradigma) {
-    var SharepointList = (function () {
-        function SharepointList(site) {
-            this.url = "/_api/web/Lists";
-            this.url = (site !== undefined ? site + this.url : this.url);
-        }
-        SharepointList.prototype.getListById = function (id) {
-            return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
-        };
-        SharepointList.prototype.getListByName = function (name) {
-            return new SharepontListQuery(this.url + "/GetByTitle('@')".replace('@', name));
-        };
-        return SharepointList;
-    }());
-    Paradigma.SharepointList = SharepointList;
-    var SharepointListFields = (function () {
-        function SharepointListFields(url) {
+    var OdataRest = (function () {
+        function OdataRest(url) {
             this.odata = "";
             this.dictionaryOdata = [];
             this.url = "";
             this.url = url;
         }
-        Object.defineProperty(SharepointListFields.prototype, "Url", {
+        Object.defineProperty(OdataRest.prototype, "Url", {
             get: function () {
                 return this.url;
             },
             enumerable: true,
             configurable: true
         });
-        SharepointListFields.prototype.IsValid = function (value) {
+        OdataRest.prototype.IsValid = function (value) {
             return value !== undefined &&
                 value !== null &&
                 (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         };
-        SharepointListFields.prototype.FilterBy = function (filter, connector) {
+        OdataRest.prototype.FilterBy = function (filter, connector) {
             this.addProperty("$filter", filter, connector);
             return this;
         };
-        SharepointListFields.prototype.OrderBy = function (orderBy) {
+        OdataRest.prototype.OrderBy = function (orderBy) {
             this.addProperty("$orderBy", orderBy);
             return this;
         };
-        SharepointListFields.prototype.Select = function (fields) {
+        OdataRest.prototype.Select = function (fields) {
             this.addProperty("$select", fields);
             return this;
         };
-        SharepointListFields.prototype.Top = function (top) {
+        OdataRest.prototype.Top = function (top) {
             this.addProperty("$top", top);
             return this;
         };
-        SharepointListFields.prototype.Expand = function (expand) {
+        OdataRest.prototype.Expand = function (expand) {
             this.addProperty("$expand", expand);
             return this;
         };
-        SharepointListFields.prototype.addProperty = function (key, value, connector) {
+        OdataRest.prototype.addProperty = function (key, value, connector) {
             if (this.IsValid(value)) {
                 if (this.dictionaryOdata[key] === undefined) {
                     this.dictionaryOdata[key] = value;
@@ -82,7 +68,7 @@ var Paradigma;
                 }
             }
         };
-        SharepointListFields.prototype.ProcessOdata = function () {
+        OdataRest.prototype.ProcessOdata = function () {
             var length = Object.keys(this.dictionaryOdata).length;
             if (length > 0) {
                 var i = 0;
@@ -97,33 +83,60 @@ var Paradigma;
                 }
             }
         };
-        SharepointListFields.prototype.Exec = function () {
+        OdataRest.prototype.Exec = function () {
             this.ProcessOdata();
             return new Paradigma.Utils().getRequest(this.url + this.odata);
         };
-        SharepointListFields.prototype.ExecSync = function () {
+        OdataRest.prototype.ExecSync = function () {
             this.ProcessOdata();
             return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
         };
-        return SharepointListFields;
+        return OdataRest;
     }());
-    Paradigma.SharepointListFields = SharepointListFields;
+    Paradigma.OdataRest = OdataRest;
+    var SharepointEndpoints = (function () {
+        function SharepointEndpoints() {
+        }
+        Object.defineProperty(SharepointEndpoints, "list", {
+            get: function () {
+                return "/_api/web/Lists";
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return SharepointEndpoints;
+    }());
+    Paradigma.SharepointEndpoints = SharepointEndpoints;
+    var SharepointList = (function (_super) {
+        __extends(SharepointList, _super);
+        function SharepointList(site) {
+            _super.call(this, (site !== undefined ? site : "") + SharepointEndpoints.list);
+        }
+        SharepointList.prototype.getListById = function (id) {
+            return new SharepontListQuery(this.Url + "(guid'@')".replace('@', id));
+        };
+        SharepointList.prototype.getListByName = function (name) {
+            return new SharepontListQuery(this.Url + "/GetByTitle('@')".replace('@', name));
+        };
+        return SharepointList;
+    }(OdataRest));
+    Paradigma.SharepointList = SharepointList;
     var SharepontListQuery = (function (_super) {
         __extends(SharepontListQuery, _super);
         function SharepontListQuery(url) {
             _super.call(this, url);
         }
         SharepontListQuery.prototype.getItems = function () {
-            return new SharepointListFields(this.Url + "/Items");
+            return new OdataRest(this.Url + "/Items");
         };
         SharepontListQuery.prototype.getItemById = function (id) {
             return new SharepointListItemsMethods(this.Url + "/Items(@)".replace('@', id.toString()));
         };
         SharepontListQuery.prototype.getFields = function () {
-            return new SharepointListFields(this.Url + "/Fields");
+            return new OdataRest(this.Url + "/Fields");
         };
         SharepontListQuery.prototype.getContentTypes = function () {
-            return new SharepointListFields(this.Url + "/ContentTypes");
+            return new OdataRest(this.Url + "/ContentTypes");
         };
         SharepontListQuery.prototype.getListItemEntityType = function () {
             return new Paradigma.Utils().getSyncRequest(this.Url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
@@ -137,7 +150,7 @@ var Paradigma;
             return new Paradigma.Utils().postRequest(this.Url + "/Items", item);
         };
         return SharepontListQuery;
-    }(SharepointListFields));
+    }(OdataRest));
     Paradigma.SharepontListQuery = SharepontListQuery;
     var SharepointListItemsMethods = (function (_super) {
         __extends(SharepointListItemsMethods, _super);
@@ -145,16 +158,16 @@ var Paradigma;
             _super.call(this, url);
         }
         SharepointListItemsMethods.prototype.getFieldValuesAsHtml = function () {
-            return new SharepointListFields(this.Url + "/fieldValuesAsHtml");
+            return new OdataRest(this.Url + "/fieldValuesAsHtml");
         };
         SharepointListItemsMethods.prototype.getFieldValuesAsText = function () {
-            return new SharepointListFields(this.Url + "/fieldValuesAsText");
+            return new OdataRest(this.Url + "/fieldValuesAsText");
         };
         SharepointListItemsMethods.prototype.getAttachmentFiles = function () {
-            return new SharepointListFields(this.Url + "/AttachmentFiles");
+            return new OdataRest(this.Url + "/AttachmentFiles");
         };
         return SharepointListItemsMethods;
-    }(SharepointListFields));
+    }(OdataRest));
     Paradigma.SharepointListItemsMethods = SharepointListItemsMethods;
 })(Paradigma || (Paradigma = {}));
 //# sourceMappingURL=Paradigma.Sharepoint.js.map
