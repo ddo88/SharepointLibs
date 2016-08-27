@@ -21,40 +21,6 @@ namespace Paradigma {
         }
     }
 
-    export class SharepontListQuery {
-
-        private url: string = "";
-        constructor(url: string) {
-            this.url = url;
-        }
-        public getItems(): SharepointListFields {
-            return new SharepointListFields(this.url + "/Items");
-        }
-        public getItemById(id:number):SharepointListItemsMethods{
-            return new SharepointListItemsMethods(this.url+"/Items(@)".replace('@',id.toString()));
-        }
-        public getFields(): SharepointListFields {
-            return new SharepointListFields(this.url + "/Fields");
-        }
-        public getContentTypes(): SharepointListFields {
-            return new SharepointListFields(this.url + "/ContentTypes");
-        }
-        public getListItemEntityType():string
-        {
-            return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
-        }
-        
-        public insertListItem(item:any):any
-        {
-            //if IE
-            if (detectBrowser().isIE){
-              UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            }
-            item["__metadata"] = { "type": this.getListItemEntityType() };
-            return new Paradigma.Utils().postRequest(this.url+ "/Items",item);
-        }
-    }
-
     export class SharepointListFields {
 
         private odata: string   = "";
@@ -136,6 +102,39 @@ namespace Paradigma {
         public ExecSync():any{
             this.ProcessOdata();
             return new Paradigma.Utils().getSyncRequest(this.url + this.odata);
+        }
+    }
+
+    export class SharepontListQuery extends SharepointListFields {
+
+        constructor(url: string) {
+            super(url);
+        }
+        public getItems(): SharepointListFields {
+            return new SharepointListFields(this.Url + "/Items");
+        }
+        public getItemById(id:number):SharepointListItemsMethods{
+            return new SharepointListItemsMethods(this.Url+"/Items(@)".replace('@',id.toString()));
+        }
+        public getFields(): SharepointListFields {
+            return new SharepointListFields(this.Url + "/Fields");
+        }
+        public getContentTypes(): SharepointListFields {
+            return new SharepointListFields(this.Url + "/ContentTypes");
+        }
+        public getListItemEntityType():string
+        {
+            return new Paradigma.Utils().getSyncRequest(this.Url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
+        }
+        
+        public insertListItem(item:any):any
+        {
+            //if IE
+            if (detectBrowser().isIE){
+              UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            }
+            item["__metadata"] = { "type": this.getListItemEntityType() };
+            return new Paradigma.Utils().postRequest(this.Url+ "/Items",item);
         }
     }    
 

@@ -23,37 +23,6 @@ var Paradigma;
         return SharepointList;
     }());
     Paradigma.SharepointList = SharepointList;
-    var SharepontListQuery = (function () {
-        function SharepontListQuery(url) {
-            this.url = "";
-            this.url = url;
-        }
-        SharepontListQuery.prototype.getItems = function () {
-            return new SharepointListFields(this.url + "/Items");
-        };
-        SharepontListQuery.prototype.getItemById = function (id) {
-            return new SharepointListItemsMethods(this.url + "/Items(@)".replace('@', id.toString()));
-        };
-        SharepontListQuery.prototype.getFields = function () {
-            return new SharepointListFields(this.url + "/Fields");
-        };
-        SharepontListQuery.prototype.getContentTypes = function () {
-            return new SharepointListFields(this.url + "/ContentTypes");
-        };
-        SharepontListQuery.prototype.getListItemEntityType = function () {
-            return new Paradigma.Utils().getSyncRequest(this.url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
-        };
-        SharepontListQuery.prototype.insertListItem = function (item) {
-            //if IE
-            if (detectBrowser().isIE) {
-                UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            }
-            item["__metadata"] = { "type": this.getListItemEntityType() };
-            return new Paradigma.Utils().postRequest(this.url + "/Items", item);
-        };
-        return SharepontListQuery;
-    }());
-    Paradigma.SharepontListQuery = SharepontListQuery;
     var SharepointListFields = (function () {
         function SharepointListFields(url) {
             this.odata = "";
@@ -139,6 +108,37 @@ var Paradigma;
         return SharepointListFields;
     }());
     Paradigma.SharepointListFields = SharepointListFields;
+    var SharepontListQuery = (function (_super) {
+        __extends(SharepontListQuery, _super);
+        function SharepontListQuery(url) {
+            _super.call(this, url);
+        }
+        SharepontListQuery.prototype.getItems = function () {
+            return new SharepointListFields(this.Url + "/Items");
+        };
+        SharepontListQuery.prototype.getItemById = function (id) {
+            return new SharepointListItemsMethods(this.Url + "/Items(@)".replace('@', id.toString()));
+        };
+        SharepontListQuery.prototype.getFields = function () {
+            return new SharepointListFields(this.Url + "/Fields");
+        };
+        SharepontListQuery.prototype.getContentTypes = function () {
+            return new SharepointListFields(this.Url + "/ContentTypes");
+        };
+        SharepontListQuery.prototype.getListItemEntityType = function () {
+            return new Paradigma.Utils().getSyncRequest(this.Url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
+        };
+        SharepontListQuery.prototype.insertListItem = function (item) {
+            //if IE
+            if (detectBrowser().isIE) {
+                UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            }
+            item["__metadata"] = { "type": this.getListItemEntityType() };
+            return new Paradigma.Utils().postRequest(this.Url + "/Items", item);
+        };
+        return SharepontListQuery;
+    }(SharepointListFields));
+    Paradigma.SharepontListQuery = SharepontListQuery;
     var SharepointListItemsMethods = (function (_super) {
         __extends(SharepointListItemsMethods, _super);
         function SharepointListItemsMethods(url) {
