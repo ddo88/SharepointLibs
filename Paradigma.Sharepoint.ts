@@ -5,16 +5,13 @@
 
 namespace Paradigma {
 
-    // export class APp{
-
-    //     public EJE(){
-    //         new Paradigma.SharepointList().getListByName("ListaEnviarA").getItemById(1).Exec().done(function(d){console.log(d);})
-    //     }
-    // }
-
     export class SharepointList {
-        private url: string = "/_api/web/Lists";
 
+        private url: string = "/_api/web/Lists";
+        
+        constructor(site?:string) {
+            this.url=(site!==undefined?site+this.url:this.url);
+        }
         public getListById(id: string): SharepontListQuery {
             return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
         }
@@ -152,6 +149,9 @@ namespace Paradigma {
         }
         public getFieldValuesAsText(){
            return new SharepointListFields(this.Url+"/fieldValuesAsText");
+        }
+        public getAttachmentFiles(){
+            return new SharepointListFields(this.Url+"/AttachmentFiles")
         }
     }
     

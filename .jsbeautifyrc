@@ -1,4 +1,0 @@
-{
-    "beautify.JSfiles": ["js"],
-    "beautify.onSave": ["js"]
-}

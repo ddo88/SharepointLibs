@@ -9,14 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Paradigma;
 (function (Paradigma) {
-    // export class APp{
-    //     public EJE(){
-    //         new Paradigma.SharepointList().getListByName("ListaEnviarA").getItemById(1).Exec().done(function(d){console.log(d);})
-    //     }
-    // }
     var SharepointList = (function () {
-        function SharepointList() {
+        function SharepointList(site) {
             this.url = "/_api/web/Lists";
+            this.url = (site !== undefined ? site + this.url : this.url);
         }
         SharepointList.prototype.getListById = function (id) {
             return new SharepontListQuery(this.url + "(guid'@')".replace('@', id));
@@ -153,6 +149,9 @@ var Paradigma;
         };
         SharepointListItemsMethods.prototype.getFieldValuesAsText = function () {
             return new SharepointListFields(this.Url + "/fieldValuesAsText");
+        };
+        SharepointListItemsMethods.prototype.getAttachmentFiles = function () {
+            return new SharepointListFields(this.Url + "/AttachmentFiles");
         };
         return SharepointListItemsMethods;
     }(SharepointListFields));
