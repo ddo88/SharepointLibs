@@ -16,6 +16,11 @@ SharepointLib is designed to ease query sharepoint rest api on sharepoint list
 - getListItemEntityType - return ListItemEntityType e.g: "SP.Data.CustomListListItem"
 - insertListItem - insert ListItem in list
 
+### SharepointListItemMethods
+- getFieldValuesAsHtml - return fields of selected listitem on html format, util for multiplelines fields 
+- getFieldValuesAsText - return fields of seleted listitem on text format
+- getAttachmentFiles - find attachment files in the selected listitem
+
 ### SharepointListFields
 - FilterBy - method to add odata filter to query
 - OrderBy  - method to add odata orderBY field to query
