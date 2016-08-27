@@ -47,7 +47,6 @@ var Paradigma;
             $.ajax(settings);
             return result;
         };
-        ;
         return Utils;
     }());
     Paradigma.Utils = Utils;

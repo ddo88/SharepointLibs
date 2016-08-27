@@ -48,6 +48,6 @@ namespace Paradigma
             };
             $.ajax(settings);
             return result;
-        };
+        }
     }
 }
