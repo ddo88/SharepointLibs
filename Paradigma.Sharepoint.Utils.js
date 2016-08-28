@@ -4,6 +4,38 @@ var Paradigma;
     var Utils = (function () {
         function Utils() {
         }
+        /* search */
+        Utils.checkKeys = function (value, keys) {
+            var sw = false;
+            for (var i = 0, length = keys.length; i < length; i++) {
+                if (value.Key == keys[i])
+                    sw = true;
+            }
+            return sw;
+        };
+        Utils.getCells = function (rows, keys) {
+            var r = rows.filter(function (a, b, c) {
+                return Paradigma.Utils.checkKeys(a, keys);
+            });
+            var obj = {};
+            for (var i = 0, length = r.length; i < length; i++) {
+                obj[r[i].Key] = r[i].Value;
+            }
+            return obj;
+        };
+        Utils.searchFormatData = function (data, keys) {
+            if (typeof (keys) === "string") {
+                keys = keys.split(',');
+            }
+            var result = [];
+            // var totalRows = data.d.query.PrimaryQueryResult.RelevantResults.TotalRows;
+            var totalRows = data.d.query.PrimaryQueryResult.RelevantResults.RowCount;
+            for (var i = 0, length = totalRows; i < totalRows; i++) {
+                result.push(Paradigma.Utils.getCells(data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results[i].Cells.results, keys));
+            }
+            return result;
+        };
+        /* end search */
         Utils.IsValid = function (value) {
             return value !== undefined &&
                 value !== null &&

@@ -98,6 +98,10 @@ namespace Paradigma {
         public static get userprofile():string{
             return "/_api/sp.userprofiles.peoplemanager";
         }
+
+        public static get search():string{
+            return "/_api/search";  
+        }
     }
 
     export class SharepointFolder extends OdataRest{
@@ -180,7 +184,7 @@ namespace Paradigma {
         }
         public getListItemEntityType():string
         {
-            return new Paradigma.Utils().getSyncRequest(this.Url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
+            return Paradigma.Utils.getSyncRequest(this.Url + "?$select = ListItemEntityTypeFullName").d.ListItemEntityTypeFullName;
         }
         
         public insertListItem(item:any):any
@@ -190,7 +194,7 @@ namespace Paradigma {
               UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
             }
             item["__metadata"] = { "type": this.getListItemEntityType() };
-            return new Paradigma.Utils().postRequest(this.Url+ "/Items",item);
+            return Paradigma.Utils.postRequest(this.Url+ "/Items",item);
         }
     }    
 
@@ -207,6 +211,61 @@ namespace Paradigma {
         }
         public getAttachmentFiles(){
             return new OdataRest(this.Url+"/AttachmentFiles")
+        }
+    }
+
+    export class SharepointSearch {
+        
+        /*"query?querytext="*/
+        
+        private _url : string;
+        public get Url() : string {
+            return this._url;
+        }
+        public set Url(v : string) {
+            this._url = v;
+        }
+
+        
+        private _properties : string;
+        public get properties() : string {
+            return this._properties;
+        }
+        public set properties(v : string) {
+            this._properties = v;
+        }
+        
+
+
+        constructor(url:string="") {
+            this.Url=Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.search);
+        }
+
+        public query(query:string=""):SharepointSearch{
+            this.Url=Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/query?querytext='{@}'&clienttype='AllResultsQuery'".replace('{@}',query));
+            return this
+        }
+
+        public select(fields:string=""):SharepointSearch{
+            this.properties = fields;
+            this.Url=Paradigma.Utils.AppendStringOnlyOnce(this.Url,"&selectproperties='{@}'".replace('{@}',fields));
+            return this;
+        }
+
+        public exec(): any {
+
+            if(Paradigma.Utils.IsValid(this.properties))
+            {
+                var promise  = $.Deferred<any>();
+                var delegate = function(fields){
+                    return function(d){
+                        promise.resolve(Paradigma.Utils.searchFormatData(d,fields));
+                    }
+                }
+                Paradigma.Utils.getRequest(this.Url).done(delegate(this.properties));
+                return promise.promise();
+            }
+            return Paradigma.Utils.getRequest(this.Url);
         }
     }
     
