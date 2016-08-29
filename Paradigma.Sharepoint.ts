@@ -109,7 +109,6 @@ namespace Paradigma {
     constructor(url:string="") {
             super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.folders));
         }
-
         public getByName(name:string){
             return new SharepointFolder(this.Url+"('@')".replace('@',name)); 
         }
@@ -135,7 +134,6 @@ namespace Paradigma {
 
         public getServerRelativeUrl(){
             return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ServerRelativeUrl"));
-            
         }
     }
 

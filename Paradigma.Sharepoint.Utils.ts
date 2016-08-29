@@ -26,6 +26,8 @@ namespace Paradigma
 	    }
 
         public static searchFormatData(data:any, keys:any):any{
+
+            
             if (typeof(keys) === "string") {
                 keys = keys.split(',');
             }

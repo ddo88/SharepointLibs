@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Paradigma.Sharepoint.js</id>
+        <version>1.0.0</version>
+        <title>Sharepoint rest lib</title>
+        <authors>D</authors>
+        <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>SharepointLib is designed to ease query sharepoint rest api on sharepoint.</description>
+        <summary>this package install Paradigma.Sharepoint.js for sharepoint rest 
+
+this code is available under MIT license.</summary>
+        <tags>Sharepoint, rest , js</tags>
+    </metadata>
+    <files>
+        <file src="..\Paradigma.Sharepoint.js" target="content\Scripts\Paradigma.Sharepoint.js" />
+        <file src="..\Paradigma.Sharepoint.Utils.js" target="content\Scripts\Paradigma.Sharepoint.Utils.js" />
+    </files>
+</package>
