@@ -122,7 +122,6 @@ var Paradigma;
         });
         return SharepointEndpoints;
     }());
-    Paradigma.SharepointEndpoints = SharepointEndpoints;
     var SharepointFolder = (function (_super) {
         __extends(SharepointFolder, _super);
         function SharepointFolder(url) {
@@ -284,4 +283,3 @@ var Paradigma;
     }());
     Paradigma.SharepointSearch = SharepointSearch;
 })(Paradigma || (Paradigma = {}));
-//# sourceMappingURL=Paradigma.Sharepoint.js.map

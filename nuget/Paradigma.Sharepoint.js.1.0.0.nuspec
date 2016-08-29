@@ -6,15 +6,22 @@
         <title>Sharepoint rest lib</title>
         <authors>D</authors>
         <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
-        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>SharepointLib is designed to ease query sharepoint rest api on sharepoint.</description>
         <summary>this package install Paradigma.Sharepoint.js for sharepoint rest 
 
 this code is available under MIT license.</summary>
         <tags>Sharepoint, rest , js</tags>
+        <dependencies>
+            <dependency id="jQuery" version="2.0.3" />
+        </dependencies>
     </metadata>
     <files>
+        <file src="..\Paradigma.Sharepoint.d.ts" target="content\Scripts\Paradigma.Sharepoint.d.ts" />
         <file src="..\Paradigma.Sharepoint.js" target="content\Scripts\Paradigma.Sharepoint.js" />
+        <file src="..\Paradigma.Sharepoint.js.map" target="content\Scripts\Paradigma.Sharepoint.js.map" />
+        <file src="..\Paradigma.Sharepoint.Utils.d.ts" target="content\Scripts\Paradigma.Sharepoint.Utils.d.ts" />
         <file src="..\Paradigma.Sharepoint.Utils.js" target="content\Scripts\Paradigma.Sharepoint.Utils.js" />
+        <file src="..\Paradigma.Sharepoint.Utils.js.map" target="content\Scripts\Paradigma.Sharepoint.Utils.js.map" />
     </files>
 </package>

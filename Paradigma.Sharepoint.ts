@@ -75,7 +75,7 @@ namespace Paradigma {
                 }
             }
         }
-        public exec(): any {
+        public exec():  JQueryPromise<any> {
             this.ProcessOdata();
             return Paradigma.Utils.getRequest(this.url + this.odata);
         }
@@ -85,7 +85,7 @@ namespace Paradigma {
         }
     }
 
-    export class SharepointEndpoints
+    class SharepointEndpoints
     {
         public static get list() : string {
             return "/_api/web/Lists";
@@ -219,6 +219,7 @@ namespace Paradigma {
         private _url : string;
         public get Url() : string {
             return this._url;
+            
         }
         public set Url(v : string) {
             this._url = v;
@@ -226,10 +227,10 @@ namespace Paradigma {
 
         
         private _properties : string;
-        public get properties() : string {
+        get properties() : string {
             return this._properties;
         }
-        public set properties(v : string) {
+        set properties(v : string) {
             this._properties = v;
         }
         
@@ -250,7 +251,7 @@ namespace Paradigma {
             return this;
         }
 
-        public exec(): any {
+        public exec(): JQueryPromise<any> {
 
             if(Paradigma.Utils.IsValid(this.properties))
             {
