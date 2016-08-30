@@ -188,9 +188,19 @@ new Paradigma.SharepointUserProfile()
 
 ### Sharepoint Search
 
-
 query - method to fill the query of search api - "queryText" 
 select - allow select the propeties for return - "selectproperties". if this method is called the return is an object with selected properties 
+
+```js
+    new Paradigma.SharepointSearch().query('IsDocument:true').exec().done(function(d){console.log(d);})
+```
+![alt tag](https://github.com/ddo88/SharepointLibs/blob/master/images/return%20api%20search.png)
+
+
+```js
+    new Paradigma.SharepointSearch().query('IsDocument:true').select("Title,Path").exec().done(function(d){console.log(d);})
+```
+![alt tag](https://github.com/ddo88/SharepointLibs/blob/master/images/return%20properties.png)
 
 ### Paradigma Utils
 
