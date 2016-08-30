@@ -25,7 +25,7 @@ declare namespace Paradigma {
     }
     class SharepointFile extends OdataRest {
         constructor(url?: string);
-        getByName(name: string): SharepointFile;
+        getFileByName(name: string): SharepointFile;
         getListItemAllFields(): SharepointFile;
         getServerRelativeUrl(): SharepointFile;
     }

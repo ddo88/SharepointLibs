@@ -129,7 +129,13 @@ var Paradigma;
             _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.folders));
         }
         SharepointFolder.prototype.getByName = function (name) {
-            return new SharepointFolder(this.Url + "('@')".replace('@', name));
+            var regex1 = /\Folders$/g;
+            if (this.Url.match(regex1)) {
+                return new SharepointFolder(this.Url + "('@')".replace('@', name));
+            }
+            else {
+                return this;
+            }
         };
         SharepointFolder.prototype.getFiles = function () {
             return new SharepointFile(this.Url);
@@ -143,8 +149,14 @@ var Paradigma;
             if (url === void 0) { url = ""; }
             _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, '/Files'));
         }
-        SharepointFile.prototype.getByName = function (name) {
-            return new SharepointFile(this.Url + "('@')".replace('@', name));
+        SharepointFile.prototype.getFileByName = function (name) {
+            var regex1 = /\Files$/g;
+            if (this.Url.match(regex1)) {
+                return new SharepointFile(this.Url + "('@')".replace('@', name));
+            }
+            else {
+                return this;
+            }
         };
         SharepointFile.prototype.getListItemAllFields = function () {
             return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
@@ -283,3 +295,4 @@ var Paradigma;
     }());
     Paradigma.SharepointSearch = SharepointSearch;
 })(Paradigma || (Paradigma = {}));
+//# sourceMappingURL=Paradigma.Sharepoint.js.map

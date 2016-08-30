@@ -109,10 +109,17 @@ namespace Paradigma {
     constructor(url:string="") {
             super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.folders));
         }
-        public getByName(name:string){
-            return new SharepointFolder(this.Url+"('@')".replace('@',name)); 
+        public getByName(name:string):SharepointFolder{
+            var regex1= /\Folders$/g;
+            if(this.Url.match(regex1))
+            {
+	            return new SharepointFolder(this.Url+"('@')".replace('@',name));    	
+            }
+            else
+            {
+                return this;
+            }
         }
-
         public getFiles(){
             return new SharepointFile(this.Url);
         }
@@ -124,8 +131,16 @@ namespace Paradigma {
             super(Paradigma.Utils.AppendStringOnlyOnce(url,'/Files'));
         }
 
-        public getByName(name:string){
-            return new SharepointFile(this.Url+"('@')".replace('@',name)); 
+        public getFileByName(name:string){
+            var regex1= /\Files$/g;
+            if(this.Url.match(regex1))
+            {
+	            return new SharepointFile(this.Url+"('@')".replace('@',name));    	
+            }
+            else
+            {
+                return this;
+            }
         }
 
         public getListItemAllFields(){
@@ -213,19 +228,14 @@ namespace Paradigma {
     }
 
     export class SharepointSearch {
-        
-        /*"query?querytext="*/
-        
         private _url : string;
         public get Url() : string {
             return this._url;
-            
         }
         public set Url(v : string) {
             this._url = v;
         }
 
-        
         private _properties : string;
         get properties() : string {
             return this._properties;
@@ -234,8 +244,6 @@ namespace Paradigma {
             this._properties = v;
         }
         
-
-
         constructor(url:string="") {
             this.Url=Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.search);
         }

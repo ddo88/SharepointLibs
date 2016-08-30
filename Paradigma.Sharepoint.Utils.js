@@ -83,3 +83,4 @@ var Paradigma;
     }());
     Paradigma.Utils = Utils;
 })(Paradigma || (Paradigma = {}));
+//# sourceMappingURL=Paradigma.Sharepoint.Utils.js.map
