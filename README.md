@@ -186,6 +186,11 @@ new Paradigma.SharepointUserProfile()
 ```
 *"/_api/sp.userprofiles.peoplemanager/getmyproperties"*
 
+### Sharepoint Search
+
+
+query - method to fill the query of search api - "queryText" 
+select - allow select the propeties for return - "selectproperties". if this method is called the return is an object with selected properties 
 
 ### Paradigma Utils
 
@@ -193,4 +198,6 @@ contains helper methods for diferent uses
 
 - ajax methods
 - append strings
+
+
 
