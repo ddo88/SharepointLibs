@@ -122,6 +122,18 @@ var Paradigma;
         });
         return SharepointEndpoints;
     }());
+    var SharepointSingleFolder = (function (_super) {
+        __extends(SharepointSingleFolder, _super);
+        function SharepointSingleFolder(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, url);
+        }
+        SharepointSingleFolder.prototype.getFiles = function () {
+            return new SharepointFile(this.Url);
+        };
+        return SharepointSingleFolder;
+    }(OdataRest));
+    Paradigma.SharepointSingleFolder = SharepointSingleFolder;
     var SharepointFolder = (function (_super) {
         __extends(SharepointFolder, _super);
         function SharepointFolder(url) {
@@ -129,16 +141,7 @@ var Paradigma;
             _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.folders));
         }
         SharepointFolder.prototype.getByName = function (name) {
-            var regex1 = /\Folders$/g;
-            if (this.Url.match(regex1)) {
-                return new SharepointFolder(this.Url + "('@')".replace('@', name));
-            }
-            else {
-                return this;
-            }
-        };
-        SharepointFolder.prototype.getFiles = function () {
-            return new SharepointFile(this.Url);
+            return new SharepointSingleFolder(this.Url + "('@')".replace('@', name));
         };
         return SharepointFolder;
     }(OdataRest));
@@ -150,23 +153,27 @@ var Paradigma;
             _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, '/Files'));
         }
         SharepointFile.prototype.getFileByName = function (name) {
-            var regex1 = /\Files$/g;
-            if (this.Url.match(regex1)) {
-                return new SharepointFile(this.Url + "('@')".replace('@', name));
-            }
-            else {
-                return this;
-            }
-        };
-        SharepointFile.prototype.getListItemAllFields = function () {
-            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
-        };
-        SharepointFile.prototype.getServerRelativeUrl = function () {
-            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ServerRelativeUrl"));
+            var append = "('@')".replace('@', name);
+            return new SharepointSingleFile(this.Url + append);
         };
         return SharepointFile;
     }(OdataRest));
     Paradigma.SharepointFile = SharepointFile;
+    var SharepointSingleFile = (function (_super) {
+        __extends(SharepointSingleFile, _super);
+        function SharepointSingleFile(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, url);
+        }
+        SharepointSingleFile.prototype.getListItemAllFields = function () {
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
+        };
+        SharepointSingleFile.prototype.getServerRelativeUrl = function () {
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ServerRelativeUrl"));
+        };
+        return SharepointSingleFile;
+    }(OdataRest));
+    Paradigma.SharepointSingleFile = SharepointSingleFile;
     var SharepointUserProfile = (function (_super) {
         __extends(SharepointUserProfile, _super);
         function SharepointUserProfile(url) {

@@ -4,6 +4,14 @@ namespace Paradigma
 {
     export class Utils {
 
+        public static validateReg<T>(url:any,appendString:string,regex:RegExp,fun:(site:string)=>T,context:T):T
+        {
+            if(url.match(regex))
+            {
+                return fun(url+appendString);
+            }
+            return context;  
+        }
                 /* search */
         private static checkKeys(value:any, keys:any):boolean{
 		    var sw = false;

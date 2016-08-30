@@ -104,25 +104,26 @@ namespace Paradigma {
         }
     }
 
-    export class SharepointFolder extends OdataRest{
-        
-    constructor(url:string="") {
-            super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.folders));
+  export class SharepointSingleFolder extends OdataRest{
+        constructor(url:string="") {
+            super(url);
         }
-        public getByName(name:string):SharepointFolder{
-            var regex1= /\Folders$/g;
-            if(this.Url.match(regex1))
-            {
-	            return new SharepointFolder(this.Url+"('@')".replace('@',name));    	
-            }
-            else
-            {
-                return this;
-            }
-        }
+
         public getFiles(){
             return new SharepointFile(this.Url);
         }
+    }
+
+    export class SharepointFolder extends OdataRest{
+        
+        constructor(url:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.folders));
+        }
+
+        public getByName(name:string):SharepointSingleFolder{
+            return new SharepointSingleFolder(this.Url+"('@')".replace('@',name));
+        }
+        
     }
 
     export class SharepointFile extends OdataRest{
@@ -132,23 +133,22 @@ namespace Paradigma {
         }
 
         public getFileByName(name:string){
-            var regex1= /\Files$/g;
-            if(this.Url.match(regex1))
-            {
-	            return new SharepointFile(this.Url+"('@')".replace('@',name));    	
-            }
-            else
-            {
-                return this;
-            }
+            var append = "('@')".replace('@', name);
+            return new SharepointSingleFile(this.Url+append);
         }
 
-        public getListItemAllFields(){
-            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ListItemAllFields")); 
+    }
+    export class SharepointSingleFile extends OdataRest {
+          constructor(url:string="") {
+            super(url);
+        }
+
+         public getListItemAllFields(){
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ListItemAllFields")); 
         }
 
         public getServerRelativeUrl(){
-            return new SharepointFile(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ServerRelativeUrl"));
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url,"/ServerRelativeUrl"));
         }
     }
 

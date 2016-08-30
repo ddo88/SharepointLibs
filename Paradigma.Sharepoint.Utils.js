@@ -4,6 +4,12 @@ var Paradigma;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.validateReg = function (url, appendString, regex, fun, context) {
+            if (url.match(regex)) {
+                return fun(url + appendString);
+            }
+            return context;
+        };
         /* search */
         Utils.checkKeys = function (value, keys) {
             var sw = false;
