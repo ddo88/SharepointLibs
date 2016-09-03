@@ -9,20 +9,31 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Paradigma;
 (function (Paradigma) {
-    var OdataRest = (function () {
-        function OdataRest(url) {
-            this.odata = "";
-            this.dictionaryOdata = [];
+    var Request = (function () {
+        function Request(url) {
             this.url = "";
             this.url = url;
         }
-        Object.defineProperty(OdataRest.prototype, "Url", {
+        Object.defineProperty(Request.prototype, "Url", {
             get: function () {
                 return this.url;
+            },
+            set: function (v) {
+                this.url = v;
             },
             enumerable: true,
             configurable: true
         });
+        return Request;
+    }());
+    Paradigma.Request = Request;
+    var OdataRest = (function (_super) {
+        __extends(OdataRest, _super);
+        function OdataRest(url) {
+            _super.call(this, url);
+            this.odata = "";
+            this.dictionaryOdata = [];
+        }
         OdataRest.prototype.filterBy = function (filter, connector) {
             this.addProperty("$filter", filter, connector);
             return this;
@@ -80,28 +91,42 @@ var Paradigma;
         };
         OdataRest.prototype.exec = function () {
             this.ProcessOdata();
-            return Paradigma.Utils.getRequest(this.url + this.odata);
+            return Paradigma.Utils.getRequest(this.Url + this.odata);
         };
         OdataRest.prototype.execSync = function () {
             this.ProcessOdata();
-            return Paradigma.Utils.getSyncRequest(this.url + this.odata);
+            return Paradigma.Utils.getSyncRequest(this.Url + this.odata);
         };
         return OdataRest;
-    }());
+    }(Request));
     Paradigma.OdataRest = OdataRest;
     var SharepointEndpoints = (function () {
         function SharepointEndpoints() {
         }
+        Object.defineProperty(SharepointEndpoints, "api", {
+            get: function () {
+                return "/_api/web";
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(SharepointEndpoints, "list", {
             get: function () {
-                return "/_api/web/Lists";
+                return this.api + "/Lists";
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(SharepointEndpoints, "folders", {
             get: function () {
-                return "/_api/web/Folders";
+                return this.api + "/Folders";
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(SharepointEndpoints, "getFolderByServerRelativeUrl", {
+            get: function () {
+                return this.api + "/getFolderByServerRelativeUrl";
             },
             enumerable: true,
             configurable: true
@@ -122,26 +147,71 @@ var Paradigma;
         });
         return SharepointEndpoints;
     }());
-    var SharepointSingleFolder = (function (_super) {
-        __extends(SharepointSingleFolder, _super);
-        function SharepointSingleFolder(url) {
+    var SharepointItem = (function (_super) {
+        __extends(SharepointItem, _super);
+        function SharepointItem(url) {
             if (url === void 0) { url = ""; }
             _super.call(this, url);
         }
-        SharepointSingleFolder.prototype.getFiles = function () {
+        SharepointItem.prototype.getProperties = function () {
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/Properties"));
+        };
+        SharepointItem.prototype.getServerRelativeUrl = function () {
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ServerRelativeUrl"));
+        };
+        return SharepointItem;
+    }(OdataRest));
+    Paradigma.SharepointItem = SharepointItem;
+    var SharepointFolderItem = (function (_super) {
+        __extends(SharepointFolderItem, _super);
+        function SharepointFolderItem(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, url);
+        }
+        SharepointFolderItem.prototype.getFiles = function () {
             return new SharepointFile(this.Url);
         };
-        return SharepointSingleFolder;
-    }(OdataRest));
-    Paradigma.SharepointSingleFolder = SharepointSingleFolder;
+        return SharepointFolderItem;
+    }(SharepointItem));
+    Paradigma.SharepointFolderItem = SharepointFolderItem;
+    var SharepointFolderRelativeUrlItem = (function (_super) {
+        __extends(SharepointFolderRelativeUrlItem, _super);
+        function SharepointFolderRelativeUrlItem(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, url);
+        }
+        SharepointFolderRelativeUrlItem.prototype.getFolders = function () {
+            return new SharepointFolder(this.Url);
+        };
+        SharepointFolderRelativeUrlItem.prototype.getFiles = function () {
+            return new SharepointFile(this.Url);
+        };
+        SharepointFolderRelativeUrlItem.prototype.getListItemAllFields = function () {
+            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
+        };
+        return SharepointFolderRelativeUrlItem;
+    }(SharepointItem));
+    Paradigma.SharepointFolderRelativeUrlItem = SharepointFolderRelativeUrlItem;
+    var SharepointFolderRelativeUrl = (function (_super) {
+        __extends(SharepointFolderRelativeUrl, _super);
+        function SharepointFolderRelativeUrl(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.getFolderByServerRelativeUrl));
+        }
+        SharepointFolderRelativeUrl.prototype.getFolderByServerRelativeUrl = function (url) {
+            return new SharepointFolderRelativeUrlItem(this.Url + "('@')".replace("@", url));
+        };
+        return SharepointFolderRelativeUrl;
+    }(Request));
+    Paradigma.SharepointFolderRelativeUrl = SharepointFolderRelativeUrl;
     var SharepointFolder = (function (_super) {
         __extends(SharepointFolder, _super);
         function SharepointFolder(url) {
             if (url === void 0) { url = ""; }
-            _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.folders));
+            _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, Paradigma.Utils.GetValidUrl(url, SharepointEndpoints.api, SharepointEndpoints.folders)));
         }
         SharepointFolder.prototype.getByName = function (name) {
-            return new SharepointSingleFolder(this.Url + "('@')".replace('@', name));
+            return new SharepointFolderItem(this.Url + "('@')".replace('@', name));
         };
         return SharepointFolder;
     }(OdataRest));
@@ -154,26 +224,23 @@ var Paradigma;
         }
         SharepointFile.prototype.getFileByName = function (name) {
             var append = "('@')".replace('@', name);
-            return new SharepointSingleFile(this.Url + append);
+            return new SharepointFileItem(this.Url + append);
         };
         return SharepointFile;
     }(OdataRest));
     Paradigma.SharepointFile = SharepointFile;
-    var SharepointSingleFile = (function (_super) {
-        __extends(SharepointSingleFile, _super);
-        function SharepointSingleFile(url) {
+    var SharepointFileItem = (function (_super) {
+        __extends(SharepointFileItem, _super);
+        function SharepointFileItem(url) {
             if (url === void 0) { url = ""; }
             _super.call(this, url);
         }
-        SharepointSingleFile.prototype.getListItemAllFields = function () {
+        SharepointFileItem.prototype.getListItemAllFields = function () {
             return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
         };
-        SharepointSingleFile.prototype.getServerRelativeUrl = function () {
-            return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ServerRelativeUrl"));
-        };
-        return SharepointSingleFile;
-    }(OdataRest));
-    Paradigma.SharepointSingleFile = SharepointSingleFile;
+        return SharepointFileItem;
+    }(SharepointItem));
+    Paradigma.SharepointFileItem = SharepointFileItem;
     var SharepointUserProfile = (function (_super) {
         __extends(SharepointUserProfile, _super);
         function SharepointUserProfile(url) {
@@ -229,6 +296,23 @@ var Paradigma;
             item["__metadata"] = { "type": this.getListItemEntityType() };
             return Paradigma.Utils.postRequest(this.Url + "/Items", item);
         };
+        SharepontListQuery.prototype.updateListItem = function (item) {
+            UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            if (detectBrowser().isIE) {
+                UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+            }
+            if (item["__metadata"] === undefined) {
+                item["__metadata"] = { "type": this.getListItemEntityType() };
+            }
+            // if(item.__metadata.etag===undefined && item.Id!==undefined)
+            // {
+            //     item.__metadata.etag=this.getItemById(item.Id).execSync().d.__metadata.etag;
+            // }
+            // else{
+            //     throw Error("item not contains property '_metadata.etag'");
+            // }
+            return Paradigma.Utils.updateRequest(this.Url + "/Items", item);
+        };
         return SharepontListQuery;
     }(OdataRest));
     Paradigma.SharepontListQuery = SharepontListQuery;
@@ -249,21 +333,12 @@ var Paradigma;
         return SharepointListItemsMethods;
     }(OdataRest));
     Paradigma.SharepointListItemsMethods = SharepointListItemsMethods;
-    var SharepointSearch = (function () {
+    var SharepointSearch = (function (_super) {
+        __extends(SharepointSearch, _super);
         function SharepointSearch(url) {
             if (url === void 0) { url = ""; }
-            this.Url = Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.search);
+            _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.search));
         }
-        Object.defineProperty(SharepointSearch.prototype, "Url", {
-            get: function () {
-                return this._url;
-            },
-            set: function (v) {
-                this._url = v;
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(SharepointSearch.prototype, "properties", {
             get: function () {
                 return this._properties;
@@ -299,7 +374,7 @@ var Paradigma;
             return Paradigma.Utils.getRequest(this.Url);
         };
         return SharepointSearch;
-    }());
+    }(Request));
     Paradigma.SharepointSearch = SharepointSearch;
 })(Paradigma || (Paradigma = {}));
 //# sourceMappingURL=Paradigma.Sharepoint.js.map

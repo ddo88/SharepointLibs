@@ -56,9 +56,54 @@ namespace Paradigma
                    value !== null      &&
                     (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         }
+
+        public static GetValidUrl(url:string,prefix:string,value:string):string{
+            var validUrl="";
+            if(Paradigma.Utils.Contains(url,prefix)){
+                validUrl=value.replace(prefix,"");
+            }
+            else
+            {
+                validUrl=value;
+            }
+            return validUrl;
+        }
+
+        public static Contains(data:string,substring:string):boolean{
+            return (data.indexOf(substring)>-1);
+        }
         public static AppendStringOnlyOnce(prefix:string,sufix:string):string{
             return prefix + ((prefix.indexOf(sufix)<0?sufix:""));
         }
+
+
+        public static updateRequest(url:string,data:any):JQueryPromise<any>{
+
+            // if(data.__metadata!==undefined && data.__metadata.etag!==undefined)
+            if(data.__metadata!==undefined )
+            {
+                var settings: JQueryAjaxSettings = {
+                                url:  url+"(@)".replace('@',data.Id),
+                                type: "POST",
+                                contentType: "application/json;odata=verbose",
+                                data: JSON.stringify(data),
+                                headers: {
+                                    "Accept": "application/json;odata=verbose",
+                                    "X-RequestDigest": $("#__REQUESTDIGEST").val(),
+                                    "X-HTTP-Method": "MERGE",
+                                    "If-Match": "*"
+                                }
+                            }
+                            return $.ajax(settings);
+
+            }
+            else
+            {
+                throw new Error("item not contain '__metadata.etag' property");
+            }            
+        }
+        
+
         public static postRequest(url:string,data:any):any{
             var settings: JQueryAjaxSettings = {
                 url:  url,

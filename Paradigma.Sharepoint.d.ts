@@ -2,12 +2,15 @@
 /// <reference path="definitions/SharePoint.d.ts" />
 /// <reference path="Paradigma.Sharepoint.Utils.d.ts" />
 declare namespace Paradigma {
-    class OdataRest {
+    class Request {
+        private url;
+        Url: string;
+        constructor(url: string);
+    }
+    class OdataRest extends Request {
         private odata;
         private dictionaryOdata;
-        private url;
         constructor(url: string);
-        Url: string;
         filterBy(filter: string, connector?: string): OdataRest;
         orderBy(orderBy: string): OdataRest;
         select(fields: string): OdataRest;
@@ -18,16 +21,36 @@ declare namespace Paradigma {
         exec(): JQueryPromise<any>;
         execSync(): any;
     }
+    class SharepointItem extends OdataRest {
+        constructor(url?: string);
+        getProperties(): OdataRest;
+        getServerRelativeUrl(): OdataRest;
+    }
+    class SharepointFolderItem extends SharepointItem {
+        constructor(url?: string);
+        getFiles(): SharepointFile;
+    }
+    class SharepointFolderRelativeUrlItem extends SharepointItem {
+        constructor(url?: string);
+        getFolders(): SharepointFolder;
+        getFiles(): SharepointFile;
+        getListItemAllFields(): OdataRest;
+    }
+    class SharepointFolderRelativeUrl extends Request {
+        constructor(url?: string);
+        getFolderByServerRelativeUrl(url: string): SharepointFolderRelativeUrlItem;
+    }
     class SharepointFolder extends OdataRest {
         constructor(url?: string);
-        getByName(name: string): SharepointFolder;
-        getFiles(): SharepointFile;
+        getByName(name: string): SharepointFolderItem;
     }
     class SharepointFile extends OdataRest {
         constructor(url?: string);
-        getFileByName(name: string): SharepointFile;
-        getListItemAllFields(): SharepointFile;
-        getServerRelativeUrl(): SharepointFile;
+        getFileByName(name: string): SharepointFileItem;
+    }
+    class SharepointFileItem extends SharepointItem {
+        constructor(url?: string);
+        getListItemAllFields(): OdataRest;
     }
     class SharepointUserProfile extends OdataRest {
         constructor(url?: string);
@@ -46,6 +69,7 @@ declare namespace Paradigma {
         getContentTypes(): OdataRest;
         getListItemEntityType(): string;
         insertListItem(item: any): any;
+        updateListItem(item: any): any;
     }
     class SharepointListItemsMethods extends OdataRest {
         constructor(url: string);
@@ -53,9 +77,7 @@ declare namespace Paradigma {
         getFieldValuesAsText(): OdataRest;
         getAttachmentFiles(): OdataRest;
     }
-    class SharepointSearch {
-        private _url;
-        Url: string;
+    class SharepointSearch extends Request {
         private _properties;
         properties: string;
         constructor(url?: string);

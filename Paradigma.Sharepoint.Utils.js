@@ -47,8 +47,42 @@ var Paradigma;
                 value !== null &&
                 (typeof (value) === "string" ? value.length > 0 : (typeof (value) === "number" ? parseInt(value) > 0 : false));
         };
+        Utils.GetValidUrl = function (url, prefix, value) {
+            var validUrl = "";
+            if (Paradigma.Utils.Contains(url, prefix)) {
+                validUrl = value.replace(prefix, "");
+            }
+            else {
+                validUrl = value;
+            }
+            return validUrl;
+        };
+        Utils.Contains = function (data, substring) {
+            return (data.indexOf(substring) > -1);
+        };
         Utils.AppendStringOnlyOnce = function (prefix, sufix) {
             return prefix + ((prefix.indexOf(sufix) < 0 ? sufix : ""));
+        };
+        Utils.updateRequest = function (url, data) {
+            // if(data.__metadata!==undefined && data.__metadata.etag!==undefined)
+            if (data.__metadata !== undefined) {
+                var settings = {
+                    url: url + "(@)".replace('@', data.Id),
+                    type: "POST",
+                    contentType: "application/json;odata=verbose",
+                    data: JSON.stringify(data),
+                    headers: {
+                        "Accept": "application/json;odata=verbose",
+                        "X-RequestDigest": $("#__REQUESTDIGEST").val(),
+                        "X-HTTP-Method": "MERGE",
+                        "If-Match": "*"
+                    }
+                };
+                return $.ajax(settings);
+            }
+            else {
+                throw new Error("item not contain '__metadata.etag' property");
+            }
         };
         Utils.postRequest = function (url, data) {
             var settings = {

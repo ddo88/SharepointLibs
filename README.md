@@ -102,7 +102,7 @@ allow to user sharepoint rest api into folder of sharepoint
 - getByName - find folder by name  
 - getFiles - find file in folder
 
-### SharepointFile
+### Sharepoint File
 
 - getByName - find file in folder by name property
 - getListItemAllFields - get all list item fields of file
