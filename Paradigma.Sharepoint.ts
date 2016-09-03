@@ -113,6 +113,10 @@ namespace Paradigma {
             return this.api+"/getFolderByServerRelativeUrl";
         }
 
+        public static get getFileByServerRelativeUrl():string{
+            return this.api+"/getFileByServerRelativeUrl";
+        }
+
         public static get userprofile():string{
             return "/_api/sp.userprofiles.peoplemanager";
         }
@@ -145,6 +149,16 @@ namespace Paradigma {
         }
     }
 
+    export class SharepointFileRelativeUrl extends Request{
+        constructor(url:string="") {
+            super(Paradigma.Utils.AppendStringOnlyOnce(url,SharepointEndpoints.getFileByServerRelativeUrl));
+        }
+
+        public getFile(relativeUrl:string){
+            return new SharepointFileItem(this.Url+"('@')".replace('@',relativeUrl));
+        }
+    }
+
     export class SharepointFolderRelativeUrlItem extends SharepointItem{
         constructor(url:string="") {
             super(url);
@@ -156,6 +170,10 @@ namespace Paradigma {
 
         public getFiles(){
             return new SharepointFile(this.Url);
+        }
+
+        public getParentFolder(){
+            return new SharepointFolderRelativeUrlItem(this.Url+"/ParentFolder");
         }
 
         public getListItemAllFields(){
@@ -271,22 +289,9 @@ namespace Paradigma {
         public updateListItem(item:any):any{
 
             UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            if (detectBrowser().isIE){
-              UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            }
             if(item["__metadata"]===undefined){
                 item["__metadata"] = { "type": this.getListItemEntityType() };
             }
-            
-            // if(item.__metadata.etag===undefined && item.Id!==undefined)
-            // {
-            //     item.__metadata.etag=this.getItemById(item.Id).execSync().d.__metadata.etag;
-            // }
-            // else{
-            //     throw Error("item not contains property '_metadata.etag'");
-            // }
-            
-
             return Paradigma.Utils.updateRequest(this.Url+ "/Items",item);
         }
     }    

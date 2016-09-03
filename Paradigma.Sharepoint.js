@@ -131,6 +131,13 @@ var Paradigma;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(SharepointEndpoints, "getFileByServerRelativeUrl", {
+            get: function () {
+                return this.api + "/getFileByServerRelativeUrl";
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(SharepointEndpoints, "userprofile", {
             get: function () {
                 return "/_api/sp.userprofiles.peoplemanager";
@@ -174,6 +181,18 @@ var Paradigma;
         return SharepointFolderItem;
     }(SharepointItem));
     Paradigma.SharepointFolderItem = SharepointFolderItem;
+    var SharepointFileRelativeUrl = (function (_super) {
+        __extends(SharepointFileRelativeUrl, _super);
+        function SharepointFileRelativeUrl(url) {
+            if (url === void 0) { url = ""; }
+            _super.call(this, Paradigma.Utils.AppendStringOnlyOnce(url, SharepointEndpoints.getFileByServerRelativeUrl));
+        }
+        SharepointFileRelativeUrl.prototype.getFile = function (relativeUrl) {
+            return new SharepointFileItem(this.Url + "('@')".replace('@', relativeUrl));
+        };
+        return SharepointFileRelativeUrl;
+    }(Request));
+    Paradigma.SharepointFileRelativeUrl = SharepointFileRelativeUrl;
     var SharepointFolderRelativeUrlItem = (function (_super) {
         __extends(SharepointFolderRelativeUrlItem, _super);
         function SharepointFolderRelativeUrlItem(url) {
@@ -185,6 +204,9 @@ var Paradigma;
         };
         SharepointFolderRelativeUrlItem.prototype.getFiles = function () {
             return new SharepointFile(this.Url);
+        };
+        SharepointFolderRelativeUrlItem.prototype.getParentFolder = function () {
+            return new SharepointFolderRelativeUrlItem(this.Url + "/ParentFolder");
         };
         SharepointFolderRelativeUrlItem.prototype.getListItemAllFields = function () {
             return new OdataRest(Paradigma.Utils.AppendStringOnlyOnce(this.Url, "/ListItemAllFields"));
@@ -298,19 +320,9 @@ var Paradigma;
         };
         SharepontListQuery.prototype.updateListItem = function (item) {
             UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            if (detectBrowser().isIE) {
-                UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
-            }
             if (item["__metadata"] === undefined) {
                 item["__metadata"] = { "type": this.getListItemEntityType() };
             }
-            // if(item.__metadata.etag===undefined && item.Id!==undefined)
-            // {
-            //     item.__metadata.etag=this.getItemById(item.Id).execSync().d.__metadata.etag;
-            // }
-            // else{
-            //     throw Error("item not contains property '_metadata.etag'");
-            // }
             return Paradigma.Utils.updateRequest(this.Url + "/Items", item);
         };
         return SharepontListQuery;

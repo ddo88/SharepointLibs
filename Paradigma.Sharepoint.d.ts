@@ -30,10 +30,15 @@ declare namespace Paradigma {
         constructor(url?: string);
         getFiles(): SharepointFile;
     }
+    class SharepointFileRelativeUrl extends Request {
+        constructor(url?: string);
+        getFile(relativeUrl: string): SharepointFileItem;
+    }
     class SharepointFolderRelativeUrlItem extends SharepointItem {
         constructor(url?: string);
         getFolders(): SharepointFolder;
         getFiles(): SharepointFile;
+        getParentFolder(): SharepointFolderRelativeUrlItem;
         getListItemAllFields(): OdataRest;
     }
     class SharepointFolderRelativeUrl extends Request {
