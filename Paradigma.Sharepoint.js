@@ -9,6 +9,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Paradigma;
 (function (Paradigma) {
+    var Demo2 = (function () {
+        function Demo2() {
+            this.name = "";
+        }
+        return Demo2;
+    }());
+    Paradigma.Demo2 = Demo2;
     var Request = (function () {
         function Request(url) {
             this.url = "";

@@ -2,6 +2,9 @@
 /// <reference path="definitions/SharePoint.d.ts" />
 /// <reference path="Paradigma.Sharepoint.Utils.d.ts" />
 declare namespace Paradigma {
+    class Demo2 {
+        private name;
+    }
     class Request {
         private url;
         Url: string;
