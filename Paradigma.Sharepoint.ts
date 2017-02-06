@@ -4,10 +4,7 @@
 /// <reference path="Paradigma.Sharepoint.Utils.ts" />
 
 namespace Paradigma {
-    export class Demo2{
-        private name:string="";
-        private demo:string="";
-    }
+  
     export class Request{
         private url: string     = "";
         get Url():string{
